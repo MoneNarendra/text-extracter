@@ -1,10 +1,4 @@
 services:
   - type: web
     name: slim-ocr-api
-    runtime: php
-    plan: free
-    buildCommand: composer install --no-dev --optimize-autoloader
-    startCommand: php -S 0.0.0.0:10000 -t public
-    envVars:
-      - key: PHP_DISPLAY_ERRORS
-        value: "On"
+    env: docker
