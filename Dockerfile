@@ -1,6 +1,12 @@
 FROM php:8.2-cli
 
 # Install system dependencies
+
+# Install Tesseract OCR
+RUN apt-get update && \
+    apt-get install -y tesseract-ocr libtesseract-dev && \
+    apt-get clean
+    
 RUN apt-get update && apt-get install -y \
     unzip \
     git \
