@@ -1,24 +1,30 @@
 FROM php:8.2-cli
 
-# Install dependencies
-RUN apt-get update && \
-    apt-get install -y tesseract-ocr libtesseract-dev && \
-    apt-get clean
+# Install system dependencies
+RUN apt-get update && apt-get install -y \
+    unzip \
+    git \
+    libzip-dev \
+    zip \
+    curl
+
+# Enable PHP extensions
+RUN docker-php-ext-install zip
 
 # Install Composer
-COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
+COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 
-# Set working dir
+# Set working directory
 WORKDIR /app
 
-# Copy your app
+# Copy code
 COPY . .
 
-# Install PHP deps
-RUN composer install --no-dev --optimize-autoloader
+# Install PHP dependencies
+RUN composer install
 
 # Expose port
 EXPOSE 10000
 
-# Start Slim app
-CMD ["php", "-S", "0.0.0.0:10000", "-t", "public"]
+# Start Slim app with built-in PHP server
+CMD ["php", "-S", "0.0.0.0:10000", "index.php"]
